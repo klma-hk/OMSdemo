@@ -1,0 +1,114 @@
+﻿<Window x:Class="WpfApp1.OMSWindows"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="OMSWindows"
+        Height="450"
+        Width="800">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    Margin="10,10,10,0">
+            <TextBlock Text="View model:"
+                       VerticalAlignment="Center"
+                       Margin="0,0,8,0" />
+            <ComboBox x:Name="ViewModelSelector"
+                      Width="260"
+                      SelectedIndex="0">
+                <ComboBoxItem Content="MainViewModel (CommunityToolkit)" />
+                <ComboBoxItem Content="StdViewModel (INotifyPropertyChanged)" />
+            </ComboBox>
+        </StackPanel>
+
+        <Grid Grid.Row="1"
+              Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Sidebar: Order Entry Ticket -->
+            <Border Grid.Column="0"
+                    Background="#F5F5F5"
+                    Padding="15"
+                    CornerRadius="5"
+                    Margin="0,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="New Order Ticket"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Margin="0,0,0,15" />
+
+                    <TextBlock Text="Product/Ticker Symbol:" />
+                    <local:OMSTextbox x:Name="PrdTicBox"
+                                      Text="{Binding NewOrder.Symbol, UpdateSourceTrigger=PropertyChanged}"
+                                      Margin="0,5,0,15" />
+
+                    <TextBlock Text="Quantity:" />
+                    <local:OMSTextbox x:Name="QuantityBox"
+                                      Text="{Binding NewOrder.Quantity, UpdateSourceTrigger=PropertyChanged}"
+                                      Margin="0,5,0,15" />
+
+                    <TextBlock Text="Price:" />
+                    <local:OMSTextbox x:Name="PriceBox"
+                                      Text="{Binding NewOrder.Price, UpdateSourceTrigger=PropertyChanged}"
+                                      Margin="0,5,0,20" />
+
+                    <Button Content="Submit Order"
+                            Command="{Binding SubmitOrderCommand}"
+                            Click="SubmitOrderButton_Click"
+                            Background="#007ACC"
+                            Foreground="White"
+                            Height="35"
+                            FontWeight="Bold" />
+                </StackPanel>
+            </Border>
+
+            <!-- Main Workspace: Real-Time Blotter Grid -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="Active Order Blotter"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0,0,0,10" />
+
+                <DataGrid Grid.Row="1"
+                          ItemsSource="{Binding ActiveOrders}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID"
+                                            Binding="{Binding OrderId}"
+                                            Width="60" />
+                        <DataGridTextColumn Header="Symbol"
+                                            Binding="{Binding Symbol}"
+                                            Width="100" />
+                        <DataGridTextColumn Header="Qty"
+                                            Binding="{Binding Quantity}"
+                                            Width="80" />
+                        <DataGridTextColumn Header="Limit Price"
+                                            Binding="{Binding Price}"
+                                            Width="100" />
+                        <DataGridTextColumn Header="Status"
+                                            Binding="{Binding Status}"
+                                            Width="120" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
